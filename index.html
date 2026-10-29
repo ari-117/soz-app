@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#173f36">
+<title>Сөз — Изучай. Говори. Сохраняй.</title>
+<style>
+:root{--forest:#173f36;--forest2:#245447;--cream:#f7f2e7;--paper:#fffdf7;--gold:#d9bd7b;--ink:#20332d;--muted:#68766e;--line:#e4e0d5;--sage:#e4ebdf}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button{font:inherit;cursor:pointer}
+.app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--paper);padding-bottom:88px;box-shadow:0 0 35px #20332d0d}
+.top{background:var(--forest);color:white;padding:24px 22px 28px;border-radius:0 0 28px 28px;position:relative;overflow:hidden}
+.top:after{content:"";position:absolute;width:180px;height:180px;border:1px solid #ffffff24;border-radius:50%;right:-64px;top:-74px;box-shadow:0 0 0 18px #ffffff08,0 0 0 38px #ffffff05}
+.brand{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.logo{width:42px;height:42px;border:1px solid #d9bd7b;border-radius:14px;display:grid;place-items:center;color:var(--gold);font-size:24px}
+.brandname{font-size:26px;font-weight:800;letter-spacing:.5px}
+.brandtag{font-size:10px;letter-spacing:1.5px;color:#d9bd7b;margin-top:2px}
+.eyebrow{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#d9bd7b;font-weight:700}
+h1{font-size:30px;line-height:1.1;margin:24px 0 10px;max-width:340px;letter-spacing:-.7px}
+.lead{color:#e1e8e1;font-size:14px;line-height:1.55;max-width:330px;margin:0}
+.section{padding:22px 18px 0}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}
+h2{font-size:18px;margin:0;letter-spacing:-.3px}
+.small{font-size:12px;color:var(--muted)}
+.feature{margin-top:-1px;background:var(--cream);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;align-items:center;gap:14px}
+.feature-icon{width:54px;height:54px;flex-shrink:0;border-radius:17px;background:#dce6d8;display:grid;place-items:center;font-size:27px}
+.feature h3{margin:0 0 5px;font-size:15px}
+.feature p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
+.btn{border:0;border-radius:14px;padding:14px 16px;font-weight:700;font-size:14px;transition:transform .1s}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--forest);color:white;width:100%;margin-top:14px}
+.btn-outline{background:transparent;border:1px solid var(--forest);color:var(--forest);width:100%;margin-top:9px}
+.languages{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.language{border:1px solid var(--line);border-radius:17px;padding:14px 12px;background:white;text-align:left;color:var(--ink);min-height:100px}
+.language.selected{border:2px solid var(--forest);background:#f0f4ec;padding:13px 11px}
+.langsymbol{font-size:21px;margin-bottom:9px}
+.langname{font-weight:750;font-size:14px}
+.langnote{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.35}
+.notice{background:#f8f0db;border:1px solid #eadbb5;border-radius:14px;padding:13px 14px;font-size:12px;line-height:1.5;color:#5c4d2e;margin-top:12px}
+.page{display:none;padding-bottom:12px}
+.page.active{display:block}
+.back{background:none;border:0;color:var(--forest);padding:0;font-weight:700;margin-bottom:18px}
+.lesson-card{background:var(--forest);color:white;border-radius:22px;padding:22px;margin:14px 18px}
+.lesson-card .word{font-size:25px;font-weight:800;margin:10px 0 8px}
+.lesson-card p{font-size:13px;line-height:1.55;color:#e2e9e3;margin:0}
+.answer{display:block;width:100%;text-align:left;padding:14px;border:1px solid var(--line);background:white;border-radius:13px;margin:9px 0;color:var(--ink)}
+.answer.correct{background:#e6f2e4;border-color:#6b9c72}
+.answer.wrong{background:#f8e7e2;border-color:#cc8675}
+.feedback{font-size:13px;line-height:1.5;margin:12px 0;color:var(--muted);min-height:20px}
+.progressbox{background:var(--cream);padding:15px;border-radius:16px;margin-top:12px}
+.progressline{height:7px;background:#deded2;border-radius:9px;overflow:hidden;margin-top:10px}
+.progressfill{height:100%;width:0;background:#65876a;transition:width .2s}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);background:#fffdf7f2;backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);padding:9px 8px calc(9px + env(safe-area-inset-bottom));z-index:5}
+.nav button{border:0;background:none;color:#718077;font-size:10px;padding:5px 0;display:flex;align-items:center;flex-direction:column;gap:4px}
+.nav button span{font-size:20px}
+.nav button.active{color:var(--forest);font-weight:800}
+footer{text-align:center;color:#8a9189;font-size:10px;padding:28px 20px 10px;line-height:1.5}
+@media(min-width:600px){body{padding:24px 0}.app{border-radius:28px;overflow:hidden;min-height:calc(100vh - 48px)}.nav{bottom:24px;border-radius:0 0 28px 28px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo">с</div><div><div class="brandname">Сөз</div><div class="brandtag">ИЗУЧАЙ · ГОВОРИ · СОХРАНЯЙ</div></div></div>
+    <div class="eyebrow" style="margin-top:26px">Языки народов России</div>
+    <h1>Каждое слово — часть наследия</h1>
+    <p class="lead">Открывай языки, слушай голоса носителей и сохраняй живую культуру.</p>
+  </header>
+
+  <main>
+    <section id="home" class="page active">
+      <div class="section">
+        <div class="feature">
+          <div class="feature-icon">✺</div>
+          <div><h3>Твой путь начинается здесь</h3><p>Выбери язык и познакомься с его культурой в небольших интерактивных уроках.</p></div>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('languages')">Выбрать язык <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="section">
+        <div class="sectionhead"><h2>Как это работает</h2><span class="small">3 шага</span></div>
+        <div class="feature" style="margin-bottom:9px"><div class="feature-icon">◉</div><div><h3>Слушай</h3><p>Знакомься с произношением и живой речью.</p></div></div>
+        <div class="feature" style="margin-bottom:9px"><div class="feature-icon">✎</div><div><h3>Изучай</h3><p>Запоминай слова через короткие задания.</p></div></div>
+        <div class="feature"><div class="feature-icon">❋</div><div><h3>Сохраняй</h3><p>Узнавай больше о языках и культуре их носителей.</p></div></div>
+      </div>
+      <footer>Учебный проект «Сөз» · Первая демоверсия<br>Материалы будут проверяться вместе с носителями языков.</footer>
+    </section>
+
+    <section id="languages" class="page">
+      <div class="section">
+        <button class="back" onclick="showPage('home')">← На главную</button>
+        <div class="sectionhead"><h2>Выбери язык</h2><span class="small">Демо-версия</span></div>
+        <p class="small" style="line-height:1.6;margin:0 0 15px">Начнём с одного языка, затем добавим новые словари и аудиозаписи.</p>
+        <div class="languages">
+          <button class="language" onclick="chooseLanguage('Ногайский')"><div class="langsymbol">◇</div><div class="langname">Ногайский</div><div class="langnote">Тюркская языковая семья</div></button>
+          <button class="language" onclick="chooseLanguage('Татарский')"><div class="langsymbol">✳</div><div class="langname">Татарский</div><div class="langnote">Тюркская языковая семья</div></button>
+          <button class="language" onclick="chooseLanguage('Удмуртский')"><div class="langsymbol">❋</div><div class="langname">Удмуртский</div><div class="langnote">Финно-угорская ветвь</div></button>
+          <button class="language" onclick="chooseLanguage('Керекский')"><div class="langsymbol">⌁</div><div class="langname">Керекский</div><div class="langnote">Язык под угрозой исчезновения</div></button>
+        </div>
+        <div id="langNotice" class="notice">Выбери язык, чтобы открыть учебный раздел.</div>
+        <button class="btn btn-primary" onclick="openLesson()">Открыть практику →</button>
+        <p class="small" style="line-height:1.55">Важно: это демонстрационный выбор. Словари и произношение добавим после проверки надёжных источников и консультаций с носителями.</p>
+      </div>
+    </section>
+
+    <section id="practice" class="page">
+      <div class="section">
+        <button class="back" onclick="showPage('home')">← На главную</button>
+        <div class="sectionhead"><h2>Практика</h2><span class="small">Знакомство с проектом</span></div>
+        <div class="lesson-card">
+          <div class="eyebrow">Мини-викторина</div>
+          <div class="word">Как лучше сохранять язык?</div>
+          <p>Выбери действие, которое помогает передавать язык следующим поколениям.</p>
+        </div>
+        <div style="padding:0 18px">
+          <button class="answer" onclick="answerQuiz(this,false)">Перестать использовать его в повседневной жизни</button>
+          <button class="answer" onclick="answerQuiz(this,true)">Записывать речь носителей и учиться у них</button>
+          <button class="answer" onclick="answerQuiz(this,false)">Оставить все материалы только в закрытом архиве</button>
+          <div id="feedback" class="feedback" aria-live="polite"></div>
+          <div class="progressbox"><div style="display:flex;justify-content:space-between;gap:10px"><strong>Мой прогресс</strong><span id="scoreText" class="small">0 правильных ответов</span></div><div class="progressline"><div id="progressFill" class="progressfill"></div></div></div>
+          <button class="btn btn-outline" onclick="resetQuiz()">Попробовать ещё раз</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <nav class="nav" aria-label="Основная навигация">
+    <button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>Главная</button>
+    <button data-page="languages" onclick="showPage('languages')"><span>◇</span>Языки</button>
+    <button data-page="practice" onclick="showPage('practice')"><span>✳</span>Практика</button>
+  </nav>
+</div>
+<script>
+let selectedLanguage = '';
+let score = 0;
+let answered = false;
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function chooseLanguage(name){
+  selectedLanguage=name;
+  document.querySelectorAll('.language').forEach(b=>b.classList.toggle('selected',b.querySelector('.langname').textContent===name));
+  document.getElementById('langNotice').textContent='Выбран язык: '+name+'. Следующий шаг — добавить проверенные слова, аудио и уроки.';
+}
+function openLesson(){
+  if(!selectedLanguage){
+    document.getElementById('langNotice').textContent='Сначала выбери один из языков выше.';
+    return;
+  }
+  document.getElementById('langNotice').textContent='Раздел «'+selectedLanguage+'» выбран. Учебные материалы добавим после проверки с носителями языка.';
+  showPage('practice');
+}
+function answerQuiz(button,correct){
+  if(answered)return;
+  answered=true;
+  document.querySelectorAll('.answer').forEach(b=>b.disabled=true);
+  if(correct){
+    button.classList.add('correct');
+    document.getElementById('feedback').textContent='Верно. Живые записи, обучение у носителей и передача языка в общении помогают сохранять его.';
+    score++;
+  }else{
+    button.classList.add('wrong');
+    document.querySelectorAll('.answer').forEach(b=>{if(b.textContent.startsWith('Записывать'))b.classList.add('correct')});
+    document.getElementById('feedback').textContent='Не совсем. Записи носителей и изучение языка в общении помогают сохранять живую речь.';
+  }
+  document.getElementById('scoreText').textContent=score+' правильных ответ'+(score===1?'':'ов');
+  document.getElementById('progressFill').style.width=(score>0?'100%':'0%');
+}
+function resetQuiz(){
+  answered=false;
+  document.querySelectorAll('.answer').forEach(b=>{b.disabled=false;b.classList.remove('correct','wrong')});
+  document.getElementById('feedback').textContent='';
+}
+</script>
+</body>
+</html>
